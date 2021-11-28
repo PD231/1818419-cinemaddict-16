@@ -1,6 +1,6 @@
 //Функция взята из лайва https://up.htmlacademy.ru/ecmascript/16/module/1/live
 
-const renderPosition = {
+const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
@@ -11,5 +11,5 @@ const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-export {renderPosition, renderTemplate};
+export {RenderPosition, renderTemplate};
 
