@@ -7,8 +7,8 @@ import { creeateContetntContainerTemplate } from './view/content-view.js';
 import { createShowMoreButton } from './view/show-more-button-view.js';
 import {createFooterStatisticTemplate} from './view/footer-statistic-view.js';
 import { createTopRatedList, createTopRatedFilmCards } from './view/top-rated-container-view.js';
-import { createMostCommentedList, createMostCommentedFilmCards} from './view/most-commented-container-view';
-
+import { createMostCommentedList, createMostCommentedFilmCards} from './view/most-commented-container-view.js';
+//import { data } from './moc/generate-data.js';
 const siteHeader = document.querySelector('.header');
 renderTemplate(siteHeader, createProfileTemplate(), RenderPosition.BEFOREEND);
 
@@ -47,3 +47,6 @@ for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
 }
 const footerStatistic = document.querySelector('.footer__statistics');
 renderTemplate(footerStatistic, createFooterStatisticTemplate(), RenderPosition.BEFOREEND);
+
+
+//console.log(data);
