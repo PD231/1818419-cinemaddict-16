@@ -1,5 +1,5 @@
 
-import {getRandomPositiveInteger} from '../utils/get-random-positive-integer.js';
+import {getRandomPositiveInteger, getRandomPositiveFloat} from '../utils/get-random-positive-number.js';
 import { randomDate } from './generator-dates.js';
 import { getFewDataFromArgument } from './generate-few-data-from-argument.js';
 import { generateComments,COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT} from './generate-coments.js';
@@ -79,7 +79,7 @@ const FILM_DESCRIPTIONS = [
   'In rutrum ac purus sit amet tempus.',
 ];
 
-const DATA_COUNT = 5;
+const DATA_COUNT = 15;
 
 const generateData = (filmsName, originalName, filmsDirector, filmsScenerast, filmsCountry, filmsGener) => {
 
@@ -89,21 +89,21 @@ const generateData = (filmsName, originalName, filmsDirector, filmsScenerast, fi
   for (let i = 0; i < DATA_COUNT; i++) {
     const filmsCardItem = {
       id: i+1,
-      posterUrl: 'public/images/posters/the-dance-of-life.jpg',
+      posterUrl: './images/posters/the-dance-of-life.jpg',
       filmName: filmsName[getRandomPositiveInteger(0, 5)],
       originalFilmName: originalName[getRandomPositiveInteger(0, 5)],
-      rating: getRandomPositiveInteger(0, 10),
+      rating: getRandomPositiveFloat(0, 10),
       filmDirector: filmsDirector[getRandomPositiveInteger(0, 5)],
       scenarist: filmsScenerast[getRandomPositiveInteger(0, 5)],
       reliseDate: randomDate(),
-      duration: '1h 36m',
+      runtime: getRandomPositiveInteger(0, 200),
       country: filmsCountry[getRandomPositiveInteger(0, 5)],
-      gener: filmsGener[getRandomPositiveInteger(0, 5)],
-      ageRating: `${getRandomPositiveInteger(0, 21)}+`,
+      genre: getFewDataFromArgument(filmsGener, 1, 3),
+      ageRating: getRandomPositiveInteger(0, 21),
     };
-    filmsCardItem.comments =  generateComments(COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT);
-    filmsCardItem.fullDescription = getFewDataFromArgument(FILM_DESCRIPTIONS);
-    filmsCardItem.actors =  getFewDataFromArgument(FILMS_ACTORS);
+    filmsCardItem.comments =  getFewDataFromArgument((generateComments(COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT)), 1, 5);
+    filmsCardItem.fullDescription = getFewDataFromArgument(FILM_DESCRIPTIONS, 1, 5);
+    filmsCardItem.actors =  getFewDataFromArgument(FILMS_ACTORS, 2, 5);
     filmCardList[i] = filmsCardItem;
   }
   return filmCardList;

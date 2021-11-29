@@ -1,5 +1,7 @@
-import {getRandomPositiveInteger} from '../utils/get-random-positive-integer.js';
+import {getRandomPositiveInteger} from '../utils/get-random-positive-number.js';
 import { commentsDate } from './generator-dates.js';
+
+
 const COMMENTS_TEXT = [
   'Film is bullSheet',
   'normalno',
@@ -12,11 +14,7 @@ const COMMENTS_TEXT = [
 
 
 const COMMENTS_EMOTION = [
-  '🙂',
-  '😐',
-  '🙁',
-  '😠',
-  '😭',
+  'smile', 'sleeping', 'puke', 'angry',
 ];
 
 const NAMES_AUTOR_COMMENT = [
@@ -28,16 +26,17 @@ const NAMES_AUTOR_COMMENT = [
   'William Backham',
 ];
 
-const COMMENTS_COUNT = 5;
+const COMMENTS_COUNT = 10;
 
 export const generateComments = (message, emotion, autor) => {
   const COMMENTS = [];
 
-  for (let i = 0; i < COMMENTS_COUNT; i++) {
+  for (let i = 0; i <= COMMENTS_COUNT; i++) {
     const comment = {
-      commentsText: message[getRandomPositiveInteger(1, 6)],
-      emotion: emotion[getRandomPositiveInteger(1, 5)],
-      commentsAutor: autor[getRandomPositiveInteger(1, 6)],
+      id: getRandomPositiveInteger(0, 100),
+      comment: message[getRandomPositiveInteger(0, 6)],
+      emotion: emotion[getRandomPositiveInteger(0, 3)],
+      commentsAutor: autor[getRandomPositiveInteger(0, 5)],
       commentsDate: commentsDate(),
     };
     COMMENTS[i] = comment;

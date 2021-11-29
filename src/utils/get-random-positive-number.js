@@ -9,6 +9,13 @@ const getRandomPositiveInteger = (from, to) => {
   return Math.floor(result);
 };
 
+const getRandomPositiveFloat = (from, to) => {
+  const lower = Math.ceil(Math.min(Math.abs(from), Math.abs(to)));
+  const upper = Math.floor(Math.max(Math.abs(from), Math.abs(to)));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return result.toFixed(2);
+};
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -36,4 +43,4 @@ const getRandomInteger = (a = 0, b = 1) => {
 // потому что Math.random() генерирует только дробные числа и ноль.
 
 
-export {getRandomPositiveInteger, getRandomInteger};
+export {getRandomPositiveInteger, getRandomInteger, getRandomPositiveFloat};
