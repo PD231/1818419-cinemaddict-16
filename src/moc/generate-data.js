@@ -79,7 +79,7 @@ const FILM_DESCRIPTIONS = [
   'In rutrum ac purus sit amet tempus.',
 ];
 
-const DATA_COUNT = 15;
+const DATA_COUNT = 22;
 
 const generateData = (filmsName, originalName, filmsDirector, filmsScenerast, filmsCountry, filmsGener) => {
 

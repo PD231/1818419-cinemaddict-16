@@ -10,7 +10,7 @@ import { createTopRatedList } from './view/top-rated-container-view.js';
 import { createMostCommentedList} from './view/most-commented-container-view.js';
 import { data } from './moc/generate-data.js';
 import { showPopap } from './moc/generate-comment.js';
-
+import { showCoverFilms } from './utils/show-cover-films.js';
 
 const siteHeader = document.querySelector('.header');
 renderTemplate(siteHeader, createProfileTemplate(), RenderPosition.BEFOREEND);
@@ -23,16 +23,14 @@ renderTemplate(siteMainElement, creeateContetntContainerTemplate(), RenderPositi
 
 const films = siteMainElement.querySelector('.films');
 const filmsContainer = siteMainElement.querySelector('.films-list');
-const filmsContainerList = filmsContainer.querySelector('.films-list__container');
-const FILMS_COUNT = 5;
+
 const EXTRA_FILMS_COUNT = 2;
-for (let i = 0; i<FILMS_COUNT; i++) {
-  renderTemplate(filmsContainerList, createFilmCardTemplate(data[i]), RenderPosition.BEFOREEND);
-}
+
 
 renderTemplate(filmsContainer, createShowMoreButton(), RenderPosition.BEFOREEND);
 
 renderTemplate(films, createTopRatedList(), RenderPosition.BEFOREEND);
+showCoverFilms(data);
 
 const filmsExtraTopRated = films.querySelector('.films-list--extra');
 const filmsTopRatedContainers = filmsExtraTopRated.querySelector('.films-list__container');
@@ -43,7 +41,6 @@ topRateFilms.sort((a, b) => b.rating - a.rating );
 for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
   renderTemplate(filmsTopRatedContainers, createFilmCardTemplate(topRateFilms[i]), RenderPosition.BEFOREEND);
 }
-
 
 renderTemplate(films, createMostCommentedList(), RenderPosition.BEFOREEND);
 
