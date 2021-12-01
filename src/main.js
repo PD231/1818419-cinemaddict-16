@@ -8,9 +8,10 @@ import { createShowMoreButton } from './view/show-more-button-view.js';
 import {createFooterStatisticTemplate} from './view/footer-statistic-view.js';
 import { createTopRatedList } from './view/top-rated-container-view.js';
 import { createMostCommentedList} from './view/most-commented-container-view.js';
-import { data } from './moc/generate-data.js';
-import { showPopap } from './moc/generate-comment.js';
+import { data } from './mock/generate-data.js';
+import { showPopup } from './mock/generate-popup.js';
 import { showCoverFilms } from './utils/show-cover-films.js';
+import dayjs from 'dayjs';
 
 const siteHeader = document.querySelector('.header');
 renderTemplate(siteHeader, createProfileTemplate(), RenderPosition.BEFOREEND);
@@ -56,6 +57,6 @@ for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
 const footerStatistic = document.querySelector('.footer__statistics');
 renderTemplate(footerStatistic, createFooterStatisticTemplate(), RenderPosition.BEFOREEND);
 
+films.addEventListener('click', showPopup);
 
-films.addEventListener('click', showPopap);
 

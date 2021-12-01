@@ -1,8 +1,8 @@
 
 import {getRandomPositiveInteger, getRandomPositiveFloat} from '../utils/get-random-positive-number.js';
-import { randomDate } from './generator-dates.js';
-import { getFewDataFromArgument } from './generate-few-data-from-argument.js';
-import { generateComments,COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT} from './generate-coments.js';
+import { getRandomDate } from './generate-dates.js';
+import { getRandomItemsFromArray } from './get-random-items-from-array.js';
+import { generateComments,COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT} from './generate-comments.js';
 const FILMS_NAME = [
   'Code Red',
   'Code Blue',
@@ -95,15 +95,16 @@ const generateData = (filmsName, originalName, filmsDirector, filmsScenerast, fi
       rating: getRandomPositiveFloat(0, 10),
       filmDirector: filmsDirector[getRandomPositiveInteger(0, 5)],
       scenarist: filmsScenerast[getRandomPositiveInteger(0, 5)],
-      reliseDate: randomDate(),
+      reliseDate: getRandomDate(),
       runtime: getRandomPositiveInteger(0, 200),
       country: filmsCountry[getRandomPositiveInteger(0, 5)],
-      genre: getFewDataFromArgument(filmsGener, 1, 3),
+      genre: getRandomItemsFromArray(filmsGener, 1, 3),
       ageRating: getRandomPositiveInteger(0, 21),
+      comments: getRandomItemsFromArray((generateComments(COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT)), 1, 5),
+      fullDescription: getRandomItemsFromArray(FILM_DESCRIPTIONS, 1, 5),
+      actors: getRandomItemsFromArray(FILMS_ACTORS, 2, 5),
     };
-    filmsCardItem.comments =  getFewDataFromArgument((generateComments(COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT)), 1, 5);
-    filmsCardItem.fullDescription = getFewDataFromArgument(FILM_DESCRIPTIONS, 1, 5);
-    filmsCardItem.actors =  getFewDataFromArgument(FILMS_ACTORS, 2, 5);
+
     filmCardList[i] = filmsCardItem;
   }
   return filmCardList;

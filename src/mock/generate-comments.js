@@ -1,5 +1,5 @@
 import {getRandomPositiveInteger} from '../utils/get-random-positive-number.js';
-import { commentsDate } from './generator-dates.js';
+import { getCommentsDate } from './generate-dates.js';
 
 
 const COMMENTS_TEXT = [
@@ -28,21 +28,13 @@ const NAMES_AUTOR_COMMENT = [
 
 const COMMENTS_COUNT = 10;
 
-export const generateComments = (message, emotion, autor) => {
-  const COMMENTS = [];
-
-  for (let i = 0; i <= COMMENTS_COUNT; i++) {
-    const comment = {
-      id: getRandomPositiveInteger(0, 100),
-      comment: message[getRandomPositiveInteger(0, 6)],
-      emotion: emotion[getRandomPositiveInteger(0, 3)],
-      commentsAutor: autor[getRandomPositiveInteger(0, 5)],
-      commentsDate: commentsDate(),
-    };
-    COMMENTS[i] = comment;
-  }
-  return COMMENTS;
-};
+export const generateComments = (message, emotion, autor) => Array.from({length: COMMENTS_COUNT}, () => ({
+  id: getRandomPositiveInteger(0, 100),
+  comment: message[getRandomPositiveInteger(0, 6)],
+  emotion: emotion[getRandomPositiveInteger(0, 3)],
+  commentsAutor: autor[getRandomPositiveInteger(0, 5)],
+  commentsDate: getCommentsDate(),
+}));
 
 
 export {COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT};
