@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
+import { createElement } from '../render.js';
 
-export const createPopup = (data) => `<section class="film-details">
+const createPopup = (data) => `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
   <div class="film-details__top-container">
     <div class="film-details__close">
@@ -68,3 +69,27 @@ export const createPopup = (data) => `<section class="film-details">
   </div>
 </form>
 </section>`;
+
+export default class PopupView {
+  #element = null;
+  #data = null;
+
+  constructor(data) {
+    this.#data = data;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return createPopup(this.#data);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

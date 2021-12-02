@@ -1,7 +1,7 @@
-import dayjs from 'dayjs';
+import {createElement} from '../render.js';
 
 
-export const generateCommentsContainer = (dataCount) => `<div class="film-details__bottom-container">
+const generateCommentsContainer = (dataCount) => `<div class="film-details__bottom-container">
   <section class="film-details__comments-wrap">
     <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${dataCount}</span></h3>
 
@@ -39,16 +39,26 @@ export const generateCommentsContainer = (dataCount) => `<div class="film-detail
   </section>
 </div>`;
 
-export const showComments = (data) => `<li class="film-details__comment">
-<span class="film-details__comment-emoji">
-  <img src="./images/emoji/${data.emotion}.png" width="55" height="55" alt="emoji-smile">
-</span>
-<div>
-  <p class="film-details__comment-text">${data.comment}</p>
-  <p class="film-details__comment-info">
-    <span class="film-details__comment-author">${data.commentsAutor}</span>
-    <span class="film-details__comment-day">${dayjs(data.commentsDate).format('YYYY/MM/DD HH:MM')}</span>
-    <button class="film-details__comment-delete">Delete</button>
-  </p>
-</div>
-</li>`;
+export default class CommentsContainerView {
+  #element = null;
+  #dataCount = null;
+
+  constructor(dataCount) {
+    this.#dataCount = dataCount;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return generateCommentsContainer(this.#dataCount);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

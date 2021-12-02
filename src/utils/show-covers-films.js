@@ -1,10 +1,7 @@
-import { RenderPosition, renderTemplate} from '../render.js';
-import { createFilmCardTemplate } from '../view/film-card-view.js';
+import { RenderPosition, render} from '../render.js';
+import FilmCardView from '../view/film-card-view.js';
 
-
-export const showCoverFilms = (data) => {
-  const filmsContainerList = document.querySelector('.films-list__container');
-
+export const showCoversFilms = (container, data) => {
   let startFilm = 0;
   let finishFilm = 5;
   const addedPartFilmsCount = 5;
@@ -13,7 +10,7 @@ export const showCoverFilms = (data) => {
   const showPartFilms = copyData.slice(startFilm, finishFilm);
 
   for (let i = 0; i < showPartFilms.length; i++) {
-    renderTemplate(filmsContainerList, createFilmCardTemplate(showPartFilms[i]), RenderPosition.BEFOREEND);
+    render(container, new FilmCardView(showPartFilms[i]).element, RenderPosition.BEFOREEND);
   }
   addFilmsCover.addEventListener('click', () => {
     startFilm += addedPartFilmsCount;
@@ -23,7 +20,7 @@ export const showCoverFilms = (data) => {
       addFilmsCover.classList.add('visually-hidden');
     }
     for (let i = 0; i < addedPartFilms.length; i++) {
-      renderTemplate(filmsContainerList, createFilmCardTemplate(addedPartFilms[i]), RenderPosition.BEFOREEND);
+      render(container, new FilmCardView(addedPartFilms[i]).element, RenderPosition.BEFOREEND);
     }
   });
 };

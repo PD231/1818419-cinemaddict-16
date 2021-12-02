@@ -1,3 +1,4 @@
+import {createElement} from '../render.js';
 
 const createMostCommentedList = () => (
   `<section class="films-list films-list--extra">
@@ -10,4 +11,21 @@ const createMostCommentedList = () => (
 );
 
 
-export {createMostCommentedList};
+export default class MostCommentedListView {
+  #element = null;
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return createMostCommentedList();
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
