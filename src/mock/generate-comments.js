@@ -1,5 +1,5 @@
 import {getRandomPositiveInteger} from '../utils/get-random-positive-number.js';
-import { getCommentsDate } from './generate-dates.js';
+import { getCommentsDate } from '../utils/generate-dates.js';
 
 
 const COMMENTS_TEXT = [

@@ -1,4 +1,4 @@
-import {getRandomPositiveInteger} from '../utils/get-random-positive-number.js';
+import {getRandomPositiveInteger} from './get-random-positive-number.js';
 
 
 const getRandomItemsFromArray = (randomData, minSize, maxSize) => {

@@ -1,7 +1,7 @@
 
 import {getRandomPositiveInteger, getRandomPositiveFloat} from '../utils/get-random-positive-number.js';
-import { getRandomDate } from './generate-dates.js';
-import { getRandomItemsFromArray } from './get-random-items-from-array.js';
+import { getRandomDate } from '../utils/generate-dates.js';
+import { getRandomItemsFromArray } from '../utils/get-random-items-from-array.js';
 import { generateComments,COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT} from './generate-comments.js';
 const FILMS_NAME = [
   'Code Red',
@@ -79,7 +79,7 @@ const FILM_DESCRIPTIONS = [
   'In rutrum ac purus sit amet tempus.',
 ];
 
-const DATA_COUNT = 22;
+const DATA_COUNT = 20;
 
 const generateData = (filmsName, originalName, filmsDirector, filmsScenerast, filmsCountry, filmsGener) => {
 

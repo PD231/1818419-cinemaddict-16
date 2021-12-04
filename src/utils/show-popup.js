@@ -1,4 +1,4 @@
-import { data } from './generate-data.js';
+import { data } from '../mock/generate-data.js';
 import { RenderPosition, render} from '../render.js';
 import GenersView from '../view/geners-view.js';
 import PopupView from '../view/popup-view.js';
@@ -17,7 +17,14 @@ export const showPopup = (evt) => {
 
     const closePopup = () => {
       siteMainElement.removeChild(popupContainer.element);
+      if ((evt.key === 'Escape' || evt.key === 'Esc') && (siteMainElement.contains(popupContainer.element))) {
+        evt.preventDefault();
+        siteMainElement.removeChild(popupContainer.element);
+      }
+      document.removeEventListener('keydown', closePopup);
     };
+    document.addEventListener('keydown', closePopup);
+
 
     const rowsCollection = popupContainer.element.querySelectorAll('.film-details__row');
     const generRowsContainer = (rowsCollection[rowsCollection.length-1]).querySelector('.film-details__cell');
