@@ -28,13 +28,20 @@ const NAMES_AUTOR_COMMENT = [
 
 const COMMENTS_COUNT = 10;
 
-export const generateComments = (message, emotion, autor) => Array.from({length: COMMENTS_COUNT}, () => ({
-  id: getRandomPositiveInteger(0, 100),
-  comment: message[getRandomPositiveInteger(0, 6)],
-  emotion: emotion[getRandomPositiveInteger(0, 3)],
-  commentsAutor: autor[getRandomPositiveInteger(0, 5)],
-  commentsDate: getCommentsDate(),
-}));
+export const generateComments = (message, emotion, autor) =>  {
+  const COMMENTS = [];
+  for (let i=0; i < COMMENTS_COUNT; i++) {
+    const commentItem = {
+      id: i,
+      comment: message[getRandomPositiveInteger(0, 6)],
+      emotion: emotion[getRandomPositiveInteger(0, 3)],
+      commentsAutor: autor[getRandomPositiveInteger(0, 5)],
+      commentsDate: getCommentsDate(),
+    };
+    COMMENTS[i] = commentItem;
+  }
+  return COMMENTS;
+};
 
 
 export {COMMENTS_TEXT, COMMENTS_EMOTION, NAMES_AUTOR_COMMENT};

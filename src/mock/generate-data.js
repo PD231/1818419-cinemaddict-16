@@ -106,6 +106,7 @@ const generateData = (filmsName, originalName, filmsDirector, filmsScenerast, fi
     };
 
     filmCardList[i] = filmsCardItem;
+
   }
   return filmCardList;
 };
