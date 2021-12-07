@@ -13,7 +13,7 @@ export const showPopup = (evt) => {
     const dataForPopup = data.find((item) => item.id === +getFilmsId);
 
     const popupContainer = new PopupView(dataForPopup);
-    render(siteMainElement, popupContainer.element, RenderPosition.BEFOREEND);
+    render(siteMainElement, popupContainer, RenderPosition.BEFOREEND);
 
     const closePopup = () => {
       siteMainElement.removeChild(popupContainer.element);
@@ -30,14 +30,14 @@ export const showPopup = (evt) => {
     const generRowsContainer = (rowsCollection[rowsCollection.length-1]).querySelector('.film-details__cell');
 
     for (let i = 0; i < dataForPopup.genre.length; i++) {
-      render(generRowsContainer, new GenersView(dataForPopup.genre[i]).element, RenderPosition.BEFOREEND);
+      render(generRowsContainer, new GenersView(dataForPopup.genre[i]), RenderPosition.BEFOREEND);
     }
     const formContainer = popupContainer.element.querySelector('.film-details__inner');
-    render(formContainer, new CommentsContainerView(dataForPopup.comments.length).element, RenderPosition.BEFOREEND);
+    render(formContainer, new CommentsContainerView(dataForPopup.comments.length), RenderPosition.BEFOREEND);
 
     const commentsList = popupContainer.element.querySelector('.film-details__comments-list');
     for (let i = 0; i < dataForPopup.comments.length; i++) {
-      render(commentsList, new ShowCommentsView(dataForPopup.comments[i]).element, RenderPosition.BEFOREEND);
+      render(commentsList, new ShowCommentsView(dataForPopup.comments[i]), RenderPosition.BEFOREEND);
     }
     const closeButton = popupContainer.element.querySelector('.film-details__close-btn');
 

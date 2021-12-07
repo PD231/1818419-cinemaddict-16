@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createElement } from '../render.js';
+import AbstractView from './abstract-view.js';
 
 const createPopup = (data) => `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
@@ -70,26 +70,16 @@ const createPopup = (data) => `<section class="film-details">
 </form>
 </section>`;
 
-export default class PopupView {
-  #element = null;
+export default class PopupView extends AbstractView {
   #data = null;
 
   constructor(data) {
+    super();
     this.#data = data;
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 
   get template() {
     return createPopup(this.#data);
   }
 
-  removeElement() {
-    this.#element = null;
-  }
 }

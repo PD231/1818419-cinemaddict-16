@@ -1,4 +1,5 @@
 //Функция взята из лайва https://up.htmlacademy.ru/ecmascript/16/module/1/live
+import AbstractView from './view/abstract-view.js';
 
 export const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
@@ -9,18 +10,21 @@ export const RenderPosition = {
 
 
 export const render = (container, element, place) => {
+  const parent = container instanceof AbstractView ? container.element : container;
+  const child = element instanceof AbstractView ? element.element : element;
+
   switch (place) {
     case RenderPosition.BEFOREBEGIN:
-      container.before(element);
+      parent.before(child);
       break;
     case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
+      parent.prepend(child);
       break;
     case RenderPosition.BEFOREEND:
-      container.append(element);
+      parent.append(child);
       break;
     case RenderPosition.AFTEREND:
-      container.after(element);
+      parent.after(child);
       break;
   }
 };

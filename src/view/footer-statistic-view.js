@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from './abstract-view.js';
 
 const createFooterStatisticTemplate = () => (
   `<p>
@@ -6,21 +6,10 @@ const createFooterStatisticTemplate = () => (
   </p>`
 );
 
-export default class FooterStatisticView {
-  #element = null;
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
+export default class FooterStatisticView extends AbstractView {
 
   get template() {
     return createFooterStatisticTemplate();
   }
 
-  removeElement() {
-    this.#element = null;
-  }
 }

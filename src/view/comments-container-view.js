@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from './abstract-view.js';
 
 
 const generateCommentsContainer = (dataCount) => `<div class="film-details__bottom-container">
@@ -39,26 +39,18 @@ const generateCommentsContainer = (dataCount) => `<div class="film-details__bott
   </section>
 </div>`;
 
-export default class CommentsContainerView {
-  #element = null;
+export default class CommentsContainerView extends AbstractView {
+
   #dataCount = null;
 
   constructor(dataCount) {
+    super();
     this.#dataCount = dataCount;
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 
   get template() {
     return generateCommentsContainer(this.#dataCount);
   }
 
-  removeElement() {
-    this.#element = null;
-  }
+
 }

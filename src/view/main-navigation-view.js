@@ -1,13 +1,4 @@
-import {createElement} from '../render.js';
-
-
-export const CategoriesFilms = {
-  DEFAULT: 'All movies – \'There are no movies in our database',
-  WATCHLIST: 'There are no movies to watch now',
-  HISTORY: 'There are no watched movies now',
-  FAVORITES: 'There are no favorite movies now',
-};
-
+import AbstractView from './abstract-view.js';
 
 const createMainNavigationTemplate = () => (
   `<nav class="main-navigation">
@@ -21,21 +12,11 @@ const createMainNavigationTemplate = () => (
   </nav>`
 );
 
-export default class MainNavigationView {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
+export default class MainNavigationView extends AbstractView {
 
   get template() {
     return createMainNavigationTemplate();
   }
 
-  removeElement() {
-    this.#element = null;
-  }
+
 }

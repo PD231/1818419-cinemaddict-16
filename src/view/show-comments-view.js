@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createElement } from '../render.js';
+import AbstractView from './abstract-view.js';
 
 
 const showComments = (data) => `<li class="film-details__comment">
@@ -16,26 +16,16 @@ const showComments = (data) => `<li class="film-details__comment">
 </div>
 </li>`;
 
-export default class ShowCommentsView {
-  #element = null;
+export default class ShowCommentsView extends AbstractView {
   #data = null;
 
   constructor(data) {
+    super();
     this.#data = data;
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 
   get template() {
     return showComments(this.#data);
   }
 
-  removeElement() {
-    this.#element = null;
-  }
 }
