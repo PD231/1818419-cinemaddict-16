@@ -27,7 +27,8 @@ const filmsContainerList = contentContainer.element.querySelector('.films-list__
 const showMoreButton = contentContainer.element.querySelector('.films-list');
 showCoversFilms(filmsContainerList, data, showMoreButton);
 
-contentContainer.element.addEventListener('click', showPopup);
+contentContainer.setEditClickHandler(showPopup);
+
 
 if ( data.length > 0) {
 

@@ -21,4 +21,13 @@ export default class ContetntContainerView extends AbstractView {
     return creeateContetntContainerTemplate();
   }
 
+  setEditClickHandler = (callback) => {
+    this._callback.filmCardClick = callback;
+    this.element.querySelector('.films-list__container').addEventListener('click', this.#filmCardClickHandler);
+  }
+
+  #filmCardClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.filmCardClick(evt);
+  }
 }
