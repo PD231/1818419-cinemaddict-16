@@ -1,6 +1,7 @@
 import { RenderPosition, render} from '../render.js';
 import FilmCardView from '../view/film-card-view.js';
 import EmptyFilmView from '../view/film-list-empty.js';
+import { showPopup } from './show-popup.js';
 
 export const showCoversFilms = (container, data, containerForButton) => {
   const addFilmsCover = containerForButton.querySelector('.films-list__show-more');
@@ -13,7 +14,9 @@ export const showCoversFilms = (container, data, containerForButton) => {
     const showPartFilms = copyData.slice(startFilm, finishFilm);
 
     for (let i = 0; i < showPartFilms.length; i++) {
-      render(container, new FilmCardView(showPartFilms[i]), RenderPosition.BEFOREEND);
+      const filmCardView = new FilmCardView(showPartFilms[i]);
+      filmCardView.setEditClickHandler(showPopup);
+      render(container, filmCardView, RenderPosition.BEFOREEND);
     }
 
     addFilmsCover.addEventListener('click', () => {
