@@ -11,7 +11,9 @@ const createTopRatedList = () => (
 );
 
 export default class TopRatedListView extends AbstractView {
-
+  get filmContainerElement() {
+    return this.element.querySelector('.films-list .films-list__container');
+  }
 
   get template() {
     return createTopRatedList();

@@ -29,6 +29,15 @@ export const render = (container, element, place) => {
   }
 };
 
+export const replace = (oldComponent, newComponent) => {
+  const oldElement = oldComponent instanceof AbstractView ? oldComponent.element : oldComponent;
+  const parent = oldElement.parentElement;
+  if (parent) {
+    const newElement = newComponent instanceof AbstractView ? newComponent.element : newComponent;
+    parent.replaceChild(newElement, oldElement);
+  }
+};
+
 export const createElement = (template) => {
   const newElement = document.createElement('div');
   newElement.innerHTML = template;

@@ -1,5 +1,6 @@
 import { RenderPosition, render} from './render.js';
 import ProfileTemplateView from './view/profile-view.js';
+import FooterStatisticView from './view/footer-statistic-view.js';
 
 import { data } from './mock/generate-data.js';
 
@@ -13,3 +14,6 @@ render(siteHeader, new ProfileTemplateView(), RenderPosition.BEFOREEND);
 
 filmPresentor.init(data);
 
+const footerStatistic = document.querySelector('.footer__statistics');
+
+render(footerStatistic, new FooterStatisticView(), RenderPosition.AFTERBEGIN);

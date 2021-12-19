@@ -15,10 +15,21 @@ const creeateContetntContainerTemplate = () => (
   </section>`
 );
 
-export default class ContetntContainerView extends AbstractView {
-
+export default class ContentContainerView extends AbstractView {
   get template() {
     return creeateContetntContainerTemplate();
+  }
+
+  get filmContainerElement() {
+    return this.element.querySelector('.films-list .films-list__container');
+  }
+
+  get showMoreButton() {
+    return this.element.querySelector('.films-list__show-more');
+  }
+
+  get filmsList() {
+    return this.element.querySelector('.films-list');
   }
 
   setEditClickHandler = (callback) => {
@@ -29,5 +40,15 @@ export default class ContetntContainerView extends AbstractView {
   #filmCardClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.filmCardClick(evt);
+  }
+
+  setShowMoreButtonClickHandler = (callback) => {
+    this._callback.showMoreButtonClick = callback;
+    this.element.querySelector('.films-list__show-more').addEventListener('click', this.#showMoreButtonClickHandler);
+  }
+
+  #showMoreButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.showMoreButtonClick(evt);
   }
 }

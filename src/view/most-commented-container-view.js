@@ -13,6 +13,10 @@ const createMostCommentedList = () => (
 
 export default class MostCommentedListView extends AbstractView {
 
+  get filmContainerElement() {
+    return this.element.querySelector('.films-list .films-list__container');
+  }
+
   get template() {
     return createMostCommentedList();
   }
