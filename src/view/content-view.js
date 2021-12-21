@@ -8,9 +8,7 @@ const creeateContetntContainerTemplate = () => (
       <div class="films-list__container">
 
       </div>
-      <button class="films-list__show-more">
-      Show more
-      </button>
+
     </section>
   </section>`
 );
@@ -22,6 +20,14 @@ export default class ContentContainerView extends AbstractView {
 
   get filmContainerElement() {
     return this.element.querySelector('.films-list .films-list__container');
+  }
+
+  clearFilmContainer() {
+    this.element.querySelector('.films-list .films-list__container').innerHTML = null;
+  }
+
+  get filmsContainer() {
+    return this.element.querySelector('.films-list__container');
   }
 
   get showMoreButton() {

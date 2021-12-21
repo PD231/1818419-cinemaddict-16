@@ -6,14 +6,20 @@ import ContentContainerView from '../view/content-view.js';
 import TopRatedListView from '../view/top-rated-container-view.js';
 import MostCommentedListView from '../view/most-commented-container-view.js';
 import EmptyFilmView from '../view/film-list-empty.js';
-import SortTemplateView from '../view/sort-view.js';
+import SortTemplateView, { SortType } from '../view/sort-view.js';
 import MainNavigationView from '../view/main-navigation-view.js';
 import GenersView from '../view/geners-view.js';
 import CommentsContainerView from '../view/comments-container-view.js';
 import ShowCommentsView from '../view/show-comments-view.js';
+import ShowMoreButtonView from '../view/show-more-button-view.js';
+
+import dayjs from 'dayjs';
 
 export default class FilmPresenter {
   #filmContainer = null;
+
+
+  #currentSortType = SortType.DEFAULT;
 
   #contentContainerComponent = new ContentContainerView();
   #mainNavigationComponent = new MainNavigationView();
@@ -21,24 +27,23 @@ export default class FilmPresenter {
   #topRatedListComponent = new TopRatedListView();
   #mostCommentsListComponent = new MostCommentedListView();
   #emptyFilms = new EmptyFilmView();
-
+  #showMoreButton = new ShowMoreButtonView();
   #contentFilmsComponentMap = new Map();
-  #topRatedFilmsComponentMap = new Map();
-  #mostCommentsListComponentMap = new Map();
-  #popupComponentMap = new Map();
+
 
   constructor(filmContainer) {
     this.#filmContainer = filmContainer;
   }
 
   #films = [];
+  #filmsCopy = [];
 
   init = (films) => {
     this.#films = [...films];
+    this.#filmsCopy = [...films];
 
     render(this.#filmContainer, this.#mainNavigationComponent, RenderPosition.AFTERBEGIN);
-    render(this.#filmContainer, this.#sortListComponent, RenderPosition.BEFOREEND);
-
+    this.#renderSort();
     this.#createMainFilmsContainer();
     this.#renderTopRatedContainer();
     this.#renderMostCommentedContainer();
@@ -46,7 +51,8 @@ export default class FilmPresenter {
 
 
   #createMainFilmsContainer = () => {
-    const addFilmsCover = this.#contentContainerComponent.element.filmsList;
+    const addFilmsCover = this.#contentContainerComponent.filmsList;
+    this.#renderShowMoreButton();
     const showMoreButton = this.#contentContainerComponent.showMoreButton;
 
     if (this.#films.length > 0) {
@@ -71,7 +77,7 @@ export default class FilmPresenter {
         const addedPartFilms = copyData.slice(startFilm, finishFilm);
 
         if (finishFilm >= copyData.length) {
-          showMoreButton.removeChild(addFilmsCover);
+          addFilmsCover.removeChild(showMoreButton);
         }
 
         addedPartFilms.forEach((film) => {
@@ -84,9 +90,13 @@ export default class FilmPresenter {
 
     } else {
       this.#renderMessageWithoutFilms();
-      showMoreButton.removeChild(addFilmsCover);
+      addFilmsCover.removeChild(showMoreButton);
     }
   };
+
+  #renderShowMoreButton = () => {
+    render(this.#contentContainerComponent.filmsContainer, this.#showMoreButton, RenderPosition.AFTEREND);
+  }
 
   #renderMainContainer = () => {
     render(this.#filmContainer, this.#contentContainerComponent, RenderPosition.BEFOREEND);
@@ -104,6 +114,7 @@ export default class FilmPresenter {
     filmCardView.setMarkedAsFavoriteClickHandler(() => this.#handleAsFavorite(item));
 
     filmCardView.setPopupClickHandler(() => this.#showPopup(item));
+
     return filmCardView;
   }
 
@@ -147,7 +158,7 @@ export default class FilmPresenter {
   #updateFilmPopup = (updatedFilm) => {
     this.#updateFilm(updatedFilm);
     this.#showPopup(updatedFilm);
-    this.#contentFilmsComponentMap.set(updatedFilm.newPopupComponent); // записываем в мапу новое значение
+    this.#contentFilmsComponentMap.set(updatedFilm.newPopupComponent);
   }
 
   #renderPopup = (film) => {
@@ -156,6 +167,7 @@ export default class FilmPresenter {
       this.popupContainer.removeElement();
       this.popupContainer = null;
     }
+
     this.popupContainer = new PopupView(film);
 
     render(this.#filmContainer, this.popupContainer, RenderPosition.BEFOREEND);
@@ -206,7 +218,7 @@ export default class FilmPresenter {
 
   #addPopupEvents = () => {
     document.addEventListener('keydown', this.#closePopup);
-    this.popupContainer.setcloseButtonClickHandler(this.#closePopup);
+    this.popupContainer.setCloseButtonClickHandler(this.#closePopup);
   }
 
   #closePopup = (evt) => {
@@ -259,4 +271,37 @@ export default class FilmPresenter {
     render(this.#mostCommentsListComponent.filmContainerElement, filmCardComponent, RenderPosition.BEFOREEND);
   }
 
+  #sortfilms = (sortType) => {
+
+    switch (sortType) {
+      case SortType.DATE:
+        this.#films.sort((a, b) => dayjs(b.reliseDate).format('YYYY') - dayjs(a.reliseDate).format('YYYY'));
+        break;
+      case SortType.RATING:
+        this.#films.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        this.#films = [...this.#filmsCopy];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortfilms(sortType);
+    this.#contentContainerComponent.clearFilmContainer();
+
+    this.#createMainFilmsContainer();
+
+  }
+
+  #renderSort = () => {
+    render(this.#filmContainer, this.#sortListComponent, RenderPosition.BEFOREEND);
+    this.#sortListComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+  }
 }
