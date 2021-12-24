@@ -18,4 +18,9 @@ export default class TopRatedListView extends AbstractView {
   get template() {
     return createTopRatedList();
   }
+
+
+  remove() {
+    this.element.querySelector('.films-list__container').innerHTML = '';
+  }
 }

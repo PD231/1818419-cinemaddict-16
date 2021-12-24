@@ -21,5 +21,7 @@ export default class MostCommentedListView extends AbstractView {
     return createMostCommentedList();
   }
 
-
+  remove() {
+    this.element.querySelector('.films-list__container').innerHTML = '';
+  }
 }

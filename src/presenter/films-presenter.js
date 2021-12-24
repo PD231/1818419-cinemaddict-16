@@ -29,7 +29,7 @@ export default class FilmPresenter {
   #emptyFilms = new EmptyFilmView();
   #showMoreButton = new ShowMoreButtonView();
   #contentFilmsComponentMap = new Map();
-
+  #topRaitedFilmComponent = new Map();
 
   constructor(filmContainer) {
     this.#filmContainer = filmContainer;
@@ -131,6 +131,13 @@ export default class FilmPresenter {
     if (contentFilmComponent) {
       const newContentFilmComponent = this.#createFilmCardComponent(updatedFilm);
       replace(contentFilmComponent, newContentFilmComponent);
+      this.#topRatedListComponent.remove();
+      this.#mostCommentsListComponent.remove();
+      this.#createTopRatedFilmCards(updatedFilm);
+      this.#createMostCommentedFilmCards(updatedFilm);
+      if (this.popupContainer) {
+        this.#showPopup(updatedFilm);
+      }
       this.#contentFilmsComponentMap.set(updatedFilm.id, newContentFilmComponent);
     }
   }
@@ -158,15 +165,10 @@ export default class FilmPresenter {
   #updateFilmPopup = (updatedFilm) => {
     this.#updateFilm(updatedFilm);
     this.#showPopup(updatedFilm);
-    this.#contentFilmsComponentMap.set(updatedFilm.newPopupComponent);
   }
 
   #renderPopup = (film) => {
-    if (this.popupContainer) {
-      this.popupContainer.element.remove();
-      this.popupContainer.removeElement();
-      this.popupContainer = null;
-    }
+    this.#closePopupIfYouNeed();
 
     this.popupContainer = new PopupView(film);
 
@@ -180,6 +182,14 @@ export default class FilmPresenter {
     this.popupContainer.setMarkedAsFavoriteClickHandler(() => this.#handleAsFavoritePopup(film));
 
     return this.popupContainer;
+  }
+
+  #closePopupIfYouNeed = () => {
+    if (this.popupContainer) {
+      this.popupContainer.element.remove();
+      this.popupContainer.removeElement();
+      this.popupContainer = null;
+    }
   }
 
   #handleAddedToWatchPopup = (film) => {
@@ -231,9 +241,9 @@ export default class FilmPresenter {
     document.removeEventListener('keydown', this.#closePopup);
   }
 
-  #renderTopRatedContainer = () => {
+  #renderTopRatedContainer = (item) => {
     render(this.#contentContainerComponent, this.#topRatedListComponent, RenderPosition.BEFOREEND);
-    this.#createTopRatedFilmCards();
+    this.#createTopRatedFilmCards(item);
   }
 
   #createTopRatedFilmCards = () => {
@@ -283,7 +293,7 @@ export default class FilmPresenter {
       default:
         this.#films = [...this.#filmsCopy];
     }
-
+    this.#closePopupIfYouNeed();
     this.#currentSortType = sortType;
   }
 
