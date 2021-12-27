@@ -8,16 +8,12 @@ import MostCommentedListView from '../view/most-commented-container-view.js';
 import EmptyFilmView from '../view/film-list-empty.js';
 import SortTemplateView, { SortType } from '../view/sort-view.js';
 import MainNavigationView from '../view/main-navigation-view.js';
-import GenersView from '../view/geners-view.js';
-import CommentsContainerView from '../view/comments-container-view.js';
-import ShowCommentsView from '../view/show-comments-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 
 import dayjs from 'dayjs';
 
 export default class FilmPresenter {
   #filmContainer = null;
-
 
   #currentSortType = SortType.DEFAULT;
 
@@ -29,7 +25,6 @@ export default class FilmPresenter {
   #emptyFilms = new EmptyFilmView();
   #showMoreButton = new ShowMoreButtonView();
   #contentFilmsComponentMap = new Map();
-  #topRaitedFilmComponent = new Map();
 
   constructor(filmContainer) {
     this.#filmContainer = filmContainer;
@@ -37,6 +32,7 @@ export default class FilmPresenter {
 
   #films = [];
   #filmsCopy = [];
+  #scroll = 0;
 
   init = (films) => {
     this.#films = [...films];
@@ -135,9 +131,7 @@ export default class FilmPresenter {
       this.#mostCommentsListComponent.remove();
       this.#createTopRatedFilmCards(updatedFilm);
       this.#createMostCommentedFilmCards(updatedFilm);
-      if (this.popupContainer) {
-        this.#showPopup(updatedFilm);
-      }
+
       this.#contentFilmsComponentMap.set(updatedFilm.id, newContentFilmComponent);
     }
   }
@@ -168,13 +162,13 @@ export default class FilmPresenter {
   }
 
   #renderPopup = (film) => {
-    this.#closePopupIfYouNeed();
+    this.#removePopup();
 
     this.popupContainer = new PopupView(film);
 
     render(this.#filmContainer, this.popupContainer, RenderPosition.BEFOREEND);
-    this.#renderGeners(film);
-    this.#renderCommentsContainer(film);
+    this.popupContainer.element.scrollTop = this.#scroll;
+
     this.#addPopupEvents();
 
     this.popupContainer.setAddedToWatchClickHandler(() => this.#handleAddedToWatchPopup(film));
@@ -184,13 +178,15 @@ export default class FilmPresenter {
     return this.popupContainer;
   }
 
-  #closePopupIfYouNeed = () => {
+  #removePopup = () => {
     if (this.popupContainer) {
+      this.#scroll = this.popupContainer.element.scrollTop;
       this.popupContainer.element.remove();
       this.popupContainer.removeElement();
       this.popupContainer = null;
     }
   }
+
 
   #handleAddedToWatchPopup = (film) => {
     this.#updateFilmPopup({...film, isAddedToWatchList: !film.isAddedToWatchList});
@@ -204,41 +200,21 @@ export default class FilmPresenter {
     this.#updateFilmPopup({...film, isFavorit: !film.isFavorit});
   }
 
-  #renderGeners = (film) => {
-    for (const genre of film.genre) {
-      this.genersData = new GenersView(genre);
-      render(this.popupContainer.filmDetailsRow, this.genersData, RenderPosition.BEFOREEND);
-    }
-  }
-
-  #renderCommentsContainer = (film) => {
-    const formContainer = this.popupContainer.filmDetailsInner;
-    this.commentsContainer = new CommentsContainerView(film.comments.length);
-    render(formContainer, this.commentsContainer, RenderPosition.BEFOREEND);
-    this.#renderComments(film);
-  }
-
-  #renderComments = (film) => {
-    const commentsList = this.popupContainer.filmDetailCommentsFilm;
-    for (const comment of film.comments) {
-      this.commentsData = new ShowCommentsView(comment);
-      render(commentsList, this.commentsData, RenderPosition.BEFOREEND);
-    }
-  }
-
   #addPopupEvents = () => {
-    document.addEventListener('keydown', this.#closePopup);
-    this.popupContainer.setCloseButtonClickHandler(this.#closePopup);
+    document.addEventListener('keydown', this.#closePopupEsc);
+    this.popupContainer.setCloseButtonClickHandler(this.#closePopupClick);
   }
 
-  #closePopup = (evt) => {
+  #closePopupClick = () => {
     this.#filmContainer.removeChild(this.popupContainer.element);
+  }
 
+  #closePopupEsc = (evt) => {
     if ((evt.key === 'Escape' || evt.key === 'Esc') && (this.#filmContainer.contains(this.popupContainer.element))) {
       evt.preventDefault();
       this.#filmContainer.removeChild(this.popupContainer.element);
+      document.removeEventListener('keydown', this.#closePopupEsc);
     }
-    document.removeEventListener('keydown', this.#closePopup);
   }
 
   #renderTopRatedContainer = (item) => {
@@ -293,7 +269,7 @@ export default class FilmPresenter {
       default:
         this.#films = [...this.#filmsCopy];
     }
-    this.#closePopupIfYouNeed();
+    this.#removePopup();
     this.#currentSortType = sortType;
   }
 

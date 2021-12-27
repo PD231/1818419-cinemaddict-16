@@ -30,7 +30,6 @@ export default class SortTemplateView extends AbstractView {
     if (evt.target.tagName !== 'A') {
       return;
     }
-    //evt.target.classList.add('sort__button--active');
     const filterButtons = this.element.querySelectorAll('.sort__button');
 
     for (let i = 0; i < filterButtons.length; i++) {
