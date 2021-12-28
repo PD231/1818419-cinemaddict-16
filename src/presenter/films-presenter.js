@@ -201,19 +201,20 @@ export default class FilmPresenter {
   }
 
   #addPopupEvents = () => {
-    document.addEventListener('keydown', this.#closePopupEsc);
-    this.popupContainer.setCloseButtonClickHandler(this.#closePopupClick);
+    document.addEventListener('keydown', this.#onClosePopupEsc);
+    this.popupContainer.setCloseButtonClickHandler(this.#onClosePopupClick);
   }
 
-  #closePopupClick = () => {
+  #onClosePopupClick = () => {
     this.#filmContainer.removeChild(this.popupContainer.element);
+    document.removeEventListener('keydown', this.#onClosePopupEsc);
   }
 
-  #closePopupEsc = (evt) => {
+  #onClosePopupEsc = (evt) => {
     if ((evt.key === 'Escape' || evt.key === 'Esc') && (this.#filmContainer.contains(this.popupContainer.element))) {
       evt.preventDefault();
       this.#filmContainer.removeChild(this.popupContainer.element);
-      document.removeEventListener('keydown', this.#closePopupEsc);
+      document.removeEventListener('keydown', this.#onClosePopupEsc);
     }
   }
 

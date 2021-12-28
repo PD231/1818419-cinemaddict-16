@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import SmartView from './Smart-View';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 const createPopup = (data) => {
   const {
@@ -84,7 +86,7 @@ const createPopup = (data) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${Math.trunc(runtime / 60)}h ${(((runtime / 60) - Math.trunc(runtime / 60)) * 60).toFixed()}m</td>
+            <td class="film-details__cell">${dayjs.duration(runtime, 'm').hours()}h ${dayjs.duration(runtime, 'm').minutes()}m</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
@@ -205,7 +207,7 @@ export default class PopupView extends SmartView {
   }
 
   setEmotionClickHandler = () => {
-    this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emogiClick);
+    this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#onEmogiClickHandler);
   };
 
   setCommentInputHandler = () => {
@@ -227,7 +229,7 @@ export default class PopupView extends SmartView {
     this._callback.markedAsFavoriteClick();
   }
 
-  #emogiClick = (evt) => {
+  #onEmogiClickHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
       emogiSmile: evt.target.value,

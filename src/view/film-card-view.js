@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import AbstractView from './abstract-view.js';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 const createFilmCardTemplate = (data) => {
   const {
@@ -34,7 +36,7 @@ const createFilmCardTemplate = (data) => {
             <p class="film-card__rating">${rating}</p>
             <p class="film-card__info">
               <span class="film-card__year">${dayjs(reliseDate).format('YYYY')}</span>
-              <span class="film-card__duration">${Math.trunc(runtime / 60)}h ${(((runtime / 60) - Math.trunc(runtime / 60)) * 60).toFixed()}m </span>
+              <span class="film-card__duration">${dayjs.duration(runtime, 'm').hours()}h ${dayjs.duration(runtime, 'm').minutes()}m </span>
               <span class="film-card__genre">${genre}</span>
             </p>
             <img src="${posterUrl}" class="film-card__poster" width="230" height="340" id="${data.id}">
