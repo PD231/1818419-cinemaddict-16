@@ -14,7 +14,7 @@ export default class FilmsModel extends AbstractObservable {
   updateFilm = (updateType, update) => {
     const index = this.#films.findIndex((film) => film.id === update.id);
     if (index === -1) {
-      throw new Error('Can\'t update unexisting task');
+      throw new Error('Can\'t update unexisting film');
     }
     this.#films = [
       ...this.#films.slice(0, index),
@@ -23,6 +23,7 @@ export default class FilmsModel extends AbstractObservable {
     ];
     this._notify(updateType, update);
   }
+
 
   addTask = (updateType, update) => {
     this.#films = [
@@ -37,7 +38,7 @@ export default class FilmsModel extends AbstractObservable {
     const index = this.#films.findIndex((film) => film.id === update.id);
 
     if (index === -1) {
-      throw new Error('Can\'t delete unexisting task');
+      throw new Error('Can\'t delete unexisting film');
     }
 
     this.#films = [

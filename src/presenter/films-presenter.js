@@ -6,14 +6,16 @@ import ContentContainerView from '../view/content-view.js';
 import TopRatedListView from '../view/top-rated-container-view.js';
 import MostCommentedListView from '../view/most-commented-container-view.js';
 import EmptyFilmView from '../view/film-list-empty.js';
-import SortTemplateView, { SortType } from '../view/sort-view.js';
+import SortTemplateView from '../view/sort-view.js';
 import MainNavigationView from '../view/main-navigation-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
+import { SortType } from '../utils/const.js';
 
 import dayjs from 'dayjs';
 
 export default class FilmPresenter {
   #filmContainer = null;
+  #filmsModel = null;
 
   #currentSortType = SortType.DEFAULT;
 
@@ -26,18 +28,26 @@ export default class FilmPresenter {
   #showMoreButton = new ShowMoreButtonView();
   #contentFilmsComponentMap = new Map();
 
-  constructor(filmContainer) {
+  constructor(filmContainer, filmsModel) {
     this.#filmContainer = filmContainer;
+    this.#filmsModel = filmsModel;
   }
 
-  #films = [];
-  #filmsCopy = [];
+  get film() {
+    switch(this.#currentSortType) {
+      case SortType.DATE:
+        return [...this.#filmsModel.films].sort((a, b) => dayjs(b.reliseDate).format('YYYY') - dayjs(a.reliseDate).format('YYYY'));
+      case SortType.RATING:
+        return [...this.#filmsModel.films].sort((a, b) => b.rating - a.rating);
+    }
+
+    return this.#filmsModel.films;
+  }
+
+
   #scroll = 0;
 
-  init = (films) => {
-    this.#films = [...films];
-    this.#filmsCopy = [...films];
-
+  init = () => {
     render(this.#filmContainer, this.#mainNavigationComponent, RenderPosition.AFTERBEGIN);
     this.#renderSort();
     this.#createMainFilmsContainer();
@@ -51,11 +61,11 @@ export default class FilmPresenter {
     this.#renderShowMoreButton();
     const showMoreButton = this.#contentContainerComponent.showMoreButton;
 
-    if (this.#films.length > 0) {
+    if (this.film.length > 0) {
       this.#renderMainContainer();
       let startFilm = 0;
       let finishFilm = 5;
-      const copyData = this.#films.slice();
+      const copyData = this.film.slice();
       const showPartFilms = copyData.slice(startFilm, finishFilm);
 
 
@@ -115,12 +125,13 @@ export default class FilmPresenter {
   }
 
   #updateFilm = (updatedFilm) => {
-    const filmIndex = this.#films.findIndex((item) => item.id === updatedFilm.id);
-    const filmsList = this.#films.slice();
+    const filmIndex = this.film.findIndex((item) => item.id === updatedFilm.id);
+    const filmsList = this.film.slice();
 
     filmsList[filmIndex] = updatedFilm;
 
-    this.#films = filmsList;
+    this.#filmsModel.updateFilm('', updatedFilm);
+
 
     const contentFilmComponent = this.#contentFilmsComponentMap.get(updatedFilm.id);
 
@@ -224,7 +235,7 @@ export default class FilmPresenter {
   }
 
   #createTopRatedFilmCards = () => {
-    const topRateFilms = this.#films.slice();
+    const topRateFilms = this.film.slice();
     topRateFilms.sort((a, b) => b.rating - a.rating);
 
     topRateFilms.slice(0, 2).forEach((film) => {
@@ -244,7 +255,7 @@ export default class FilmPresenter {
   }
 
   #createMostCommentedFilmCards = () => {
-    const mostCommentFilms = this.#films.slice();
+    const mostCommentFilms = this.film.slice();
     mostCommentFilms.sort((a, b) => b.comments.length - a.comments.length);
 
     mostCommentFilms.slice(0, 2).forEach((film) => {
@@ -258,29 +269,13 @@ export default class FilmPresenter {
     render(this.#mostCommentsListComponent.filmContainerElement, filmCardComponent, RenderPosition.BEFOREEND);
   }
 
-  #sortfilms = (sortType) => {
-
-    switch (sortType) {
-      case SortType.DATE:
-        this.#films.sort((a, b) => dayjs(b.reliseDate).format('YYYY') - dayjs(a.reliseDate).format('YYYY'));
-        break;
-      case SortType.RATING:
-        this.#films.sort((a, b) => b.rating - a.rating);
-        break;
-      default:
-        this.#films = [...this.#filmsCopy];
-    }
-    this.#removePopup();
-    this.#currentSortType = sortType;
-  }
-
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
 
-    this.#sortfilms(sortType);
+    this.#currentSortType = sortType;
     this.#contentContainerComponent.clearFilmContainer();
 
     this.#createMainFilmsContainer();
