@@ -18,17 +18,6 @@ const createFilmCardTemplate = (data) => {
     posterUrl
   } = data;
 
-  const addedToWatchList = isAddedToWatchList
-    ? 'film-card__controls-item--add-to-watchlist film-card__controls-item--active'
-    : 'film-card__controls-item--add-to-watchlist';
-
-  const markedAsWatched = isMarkedAsWatched
-    ? 'film-card__controls-item--mark-as-watched film-card__controls-item--active'
-    : 'film-card__controls-item--mark-as-watched';
-
-  const markedAsFavorite = isFavorit
-    ? 'film-card__controls-item--favorite film-card__controls-item--active'
-    : 'film-card__controls-item--favorite';
 
   return `<article class="film-card">
           <a class="film-card__link">
@@ -44,9 +33,16 @@ const createFilmCardTemplate = (data) => {
             <span class="film-card__comments">${comments.length} comments</span>
           </a>
           <div class="film-card__controls">
-            <button class="film-card__controls-item ${addedToWatchList}" type="button">Add to watchlist</button>
-            <button class="film-card__controls-item ${markedAsWatched}" type="button">Mark as watched</button>
-            <button class="film-card__controls-item ${markedAsFavorite}" type="button">Mark as favorite</button>
+            <button class="film-card__controls-item ${isAddedToWatchList
+    ? 'film-card__controls-item--add-to-watchlist film-card__controls-item--active'
+    : 'film-card__controls-item--add-to-watchlist'}" type="button">Add to watchlist</button>
+
+            <button class="film-card__controls-item ${isMarkedAsWatched
+    ? 'film-card__controls-item--mark-as-watched film-card__controls-item--active'
+    : 'film-card__controls-item--mark-as-watched'}" type="button">Mark as watched</button>
+            <button class="film-card__controls-item ${isFavorit
+    ? 'film-card__controls-item--favorite film-card__controls-item--active'
+    : 'film-card__controls-item--favorite'}" type="button">Mark as favorite</button>
           </div>
         </article>`;
 };

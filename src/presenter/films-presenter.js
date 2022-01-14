@@ -9,7 +9,7 @@ import EmptyFilmView from '../view/film-list-empty.js';
 import SortTemplateView from '../view/sort-view.js';
 import MainNavigationView from '../view/main-navigation-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
-import { SortType } from '../utils/const.js';
+import { SortType, UserAction, UpdateType} from '../utils/const.js';
 
 import dayjs from 'dayjs';
 
@@ -31,6 +31,8 @@ export default class FilmPresenter {
   constructor(filmContainer, filmsModel) {
     this.#filmContainer = filmContainer;
     this.#filmsModel = filmsModel;
+
+    this.#filmsModel.addObserver(this.#handleModelEvent);
   }
 
   get film() {
@@ -114,7 +116,6 @@ export default class FilmPresenter {
 
   #createFilmCardComponent = (item) => {
     const filmCardView = new FilmCardView(item);
-
     filmCardView.setAddedToWatchClickHandler(() => this.#handleAddedToWatch(item));
     filmCardView.setMarkedAsWatchedClickHandler(() => this.#handleAddedAsWatched(item));
     filmCardView.setMarkedAsFavoriteClickHandler(() => this.#handleAsFavorite(item));
@@ -124,13 +125,18 @@ export default class FilmPresenter {
     return filmCardView;
   }
 
-  #updateFilm = (updatedFilm) => {
+  #updateFilm = (actionType, updatedFilm) => {
     const filmIndex = this.film.findIndex((item) => item.id === updatedFilm.id);
+
+    if (filmIndex  === -1) {
+      throw new Error('Can\'t update unexisting film');
+    }
+
     const filmsList = this.film.slice();
 
     filmsList[filmIndex] = updatedFilm;
 
-    this.#filmsModel.updateFilm('', updatedFilm);
+    this.#filmsModel.updateFilm(actionType, updatedFilm);
 
 
     const contentFilmComponent = this.#contentFilmsComponentMap.get(updatedFilm.id);
@@ -148,15 +154,24 @@ export default class FilmPresenter {
   }
 
   #handleAddedToWatch = (film) => {
-    this.#updateFilm({...film, isAddedToWatchList: !film.isAddedToWatchList});
+    this.#updateFilm(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...film, isAddedToWatchList: !film.isAddedToWatchList});
   }
 
   #handleAddedAsWatched = (film) => {
-    this.#updateFilm({...film, isMarkedAsWatched: !film.isMarkedAsWatched});
+    this.#updateFilm(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...film, isMarkedAsWatched: !film.isMarkedAsWatched});
   }
 
   #handleAsFavorite = (film) => {
-    this.#updateFilm({...film, isFavorit: !film.isFavorit});
+    this.#updateFilm(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...film, isFavorit: !film.isFavorit});
   }
 
   #renderFilmsCardInMainContainer = (filmCardComponent) => {
@@ -269,6 +284,14 @@ export default class FilmPresenter {
     render(this.#mostCommentsListComponent.filmContainerElement, filmCardComponent, RenderPosition.BEFOREEND);
   }
 
+
+  #handleViewAction = (actionType, updateType, update) => {
+    console.log(actionType, updateType, update);
+  }
+
+  #handleModelEvent = (updateType, data) => {
+    console.log(updateType, data);
+  }
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
